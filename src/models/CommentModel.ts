@@ -31,6 +31,8 @@ export default ( sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes)
             type: DataTypes.TEXT,
             allowNull: false
         },
+    },{
+        tableName: 'comments'
     });
 
     Comment.associate = (models: ModelsInterface): void => {
