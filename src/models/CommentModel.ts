@@ -27,7 +27,7 @@ export default ( sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes)
             primaryKey: true,
             autoIncrement: true
         },
-        title: {
+        comment: {
             type: DataTypes.TEXT,
             allowNull: false
         },
