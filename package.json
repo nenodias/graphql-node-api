@@ -23,6 +23,7 @@
     "gulp-clean": "0.3.2",
     "gulp-typescript": "3.2.2",
     "nodemon": "^1.18.9",
+    "ts-node": "^8.0.2",
     "typescript": "2.5.3"
   },
   "dependencies": {

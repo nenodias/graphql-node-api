@@ -7,7 +7,6 @@ export const tokenResolvers = {
     Mutation: {
 
         createToken:(parent, { email, password }, { db }: { db: DbConnection} ) => {
-            console.log('Entrou aqui');
             return db.User.findOne({
                 where: { email: email },
                 attributes: ['id', 'password']

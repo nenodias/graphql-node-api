@@ -1,0 +1,16 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "type": "node",
+        "request": "launch",
+        "name": "Launch current file w/ ts-node",
+        "protocol": "inspector",
+        "args": ["${relativeFile}"],
+        "cwd": "${workspaceRoot}",
+        "env": {"NODE_ENV":"development", "JWT_SECRET":"iron_man"},
+        "runtimeArgs": ["-r", "ts-node/register"],
+        "internalConsoleOptions": "openOnSessionStart"
+      }
+    ]
+  }
