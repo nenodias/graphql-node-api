@@ -7,6 +7,8 @@ import { compose } from "../../composable/composable.resolver";
 import { authResolver } from "../../composable/auth.resolver";
 import { verifyTokenResolver } from "../../composable/verify-token.resolver";
 
+const authCompose = compose(...[authResolver, verifyTokenResolver]);
+
 export const userResolvers = {
     User: {
         posts: (user: UserInstance, { first = 10, offset = 0 }, { db }: { db: DbConnection }, info: GraphQLResolveInfo) => {
@@ -19,7 +21,8 @@ export const userResolvers = {
         }
     },
     Query: {
-        users: compose(authResolver, verifyTokenResolver)((parent, { first = 10, offset = 0 }, { db }: { db: DbConnection }, info: GraphQLResolveInfo) => {
+        users: authCompose((parent, { first = 10, offset = 0 }, { db }: { db: DbConnection }, info: GraphQLResolveInfo) => {
+            console.log('users');
             return db.User.findAll({
                 limit: first,
                 offset: offset

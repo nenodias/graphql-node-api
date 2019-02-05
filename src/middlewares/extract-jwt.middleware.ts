@@ -6,7 +6,7 @@ import { UserInstance } from "../models/UserModel";
 
 export const extractJwtMiddleware = (): RequestHandler => {
     return (req : Request, res: Response, next: NextFunction): void => {
-
+        console.log('extractJwtToken');
         let authorization: string = req.get('authorization');
         let token: string = authorization ? authorization.split(' ')[1] : undefined;
         req['context'] = {}
@@ -25,7 +25,7 @@ export const extractJwtMiddleware = (): RequestHandler => {
                 attributes:['id', 'email', 'name']
             }).then((user: UserInstance) => {
                 if(user){
-                    req['context']['user'] = {
+                    req['context']['authUser'] = {
                         id: user.get('id'),
                         email: user.get('email'),
                         name: user.get('name')
