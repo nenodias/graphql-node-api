@@ -1,11 +1,12 @@
 import { GraphQLFieldResolver } from "graphql";
 import { ResolverContext } from "../../interfaces/ResolverContextInterface";
 import { ComposableResolver } from "./composable.resolver";
+import { verifyTokenResolver } from "./verify-token.resolver";
 
 export const authResolver: ComposableResolver<any, ResolverContext> =
     (resolver: GraphQLFieldResolver<any, ResolverContext>): GraphQLFieldResolver<any, ResolverContext> => {
 
-        return (parent, args, context: ResolverContext, info) => { 
+        return (parent, args, context: ResolverContext, info) => {
             if (context.authUser || context.authorization) {
                 return resolver(parent, args, context, info);
             }
@@ -13,3 +14,5 @@ export const authResolver: ComposableResolver<any, ResolverContext> =
         };
 
     };
+
+export const authResolvers = [authResolver, verifyTokenResolver];
