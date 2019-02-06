@@ -41,11 +41,16 @@ export const userResolvers = {
             id = parseInt(id);
             return db.User.findById(id).then((user: UserInstance) => {
                 if (!user) {
-                    throw new Error(`User with ${id} not found!`);
+                    throwError(!user, `User with ${id} not found!`);
                 }
                 return user;
             }).catch(handleError);
-        }
+        },
+        currentUser: authCompose((parent, args, { db, authUser }: { db: DbConnection, authUser: AuthUser }, info: GraphQLResolveInfo) => {
+            return fnFindById(db, authUser, (t: Transaction, user: UserInstance) => {
+                return user;
+            });
+        })
     },
     Mutation: {
         createUser: (parent, { input }, { db }: { db: DbConnection }, info: GraphQLResolveInfo) => {
