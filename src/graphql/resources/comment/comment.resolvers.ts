@@ -14,11 +14,11 @@ const authCompose = compose(...authResolvers);
 export const commentResolvers = {
     Comment: {
         user: (comment: CommentInstance, args, { db, dataloaders: { userLoader } }: { db: DbConnection, dataloaders: DataLoaders }, info: GraphQLResolveInfo) => {
-            return userLoader.load(comment.get('user')).catch(handleError);
+            return userLoader.load({ info:info, key:comment.get('user') }).catch(handleError);
         },
 
         post: (comment: CommentInstance, args, { db , dataloaders: { postLoader }}: { db: DbConnection, dataloaders: DataLoaders }, info: GraphQLResolveInfo) => {
-            return postLoader.load(comment.get('post')).catch(handleError);
+            return postLoader.load({ info:info, key:comment.get('post') }).catch(handleError);
         },
     },
 

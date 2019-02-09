@@ -37,7 +37,6 @@ export const userResolvers = {
     },
     Query: {
         users: (parent, { first = 10, offset = 0 }, { db, requestedFields }: { db: DbConnection, requestedFields:RequestedFields }, info: GraphQLResolveInfo) => {
-            console.log('users');
             return db.User.findAll({
                 limit: first,
                 offset: offset,
