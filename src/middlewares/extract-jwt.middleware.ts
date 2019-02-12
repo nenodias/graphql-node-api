@@ -6,7 +6,6 @@ import { UserInstance } from "../models/UserModel";
 
 export const extractJwtMiddleware = (): RequestHandler => {
     return (req : Request, res: Response, next: NextFunction): void => {
-        console.log('extractJwtToken');
         let authorization: string = req.get('authorization');
         let token: string = authorization ? authorization.split(' ')[1] : undefined;
         req['context'] = {}

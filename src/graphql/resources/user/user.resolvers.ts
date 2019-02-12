@@ -49,7 +49,7 @@ export const userResolvers = {
                 attributes: requestedFields.getFields(info, optionsAST)
             }).then((user: UserInstance) => {
                 if (!user) {
-                    throwError(!user, `User with ${id} not found!`);
+                    throwError(!user, `User with id ${id} not found!`);
                 }
                 return user;
             }).catch(handleError);
