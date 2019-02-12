@@ -8,7 +8,7 @@ chai.use(chaiHttp);
 const { expect } = chai;
 
 const handleError = error => {
-    const message : string = (error.response) ? error.response.res.text : error.message || error;
+    const message: string = (error.response) ? error.response.res.text : error.message || error;
     return Promise.reject(`${error.name}: ${message}`);
 }
 
