@@ -23,7 +23,7 @@ const userTypes = `
         photo: String!
     }
 
-    input UserUpdatePasswordInout {
+    input UserUpdatePasswordInput {
         password: String!
     }
 
@@ -38,7 +38,7 @@ const userQueries = `
 const userMutations = `
     createUser(input: UserCreateInput!): User
     updateUser(input: UserUpdateInput!): User
-    updateUserPassword(input: UserUpdatePasswordInout): Boolean
+    updateUserPassword(input: UserUpdatePasswordInput): Boolean
     deleteUser: Boolean
 `;
 

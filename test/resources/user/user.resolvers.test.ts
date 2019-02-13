@@ -289,7 +289,7 @@ describe('User', () => {
                     return chai.request(app)
                         .post('/graphql')
                         .set('content-type', 'application/json')
-                        .set('authorization', `INVALID_TOKEN`)
+                        .set('authorization', `Bearer INVALID_TOKEN`)
                         .send(JSON.stringify(body))
                         .then(res => {
 
@@ -303,6 +303,36 @@ describe('User', () => {
             });
 
 
+            describe('updateUserPassword', () => {
+                it('should update the password of an existing User', () => {
+                    let body = {
+                        query: `
+                            mutation updateUserPassword($input: UserUpdatePasswordInput!){
+                                updateUserPassword(input: $input)
+                            }
+                        `,
+                        variables: {
+                            input: {
+                                password: 'peter123',
+                            }
+                        }
+                    };
+
+                    return chai.request(app)
+                        .post('/graphql')
+                        .set('content-type', 'application/json')
+                        .set('authorization', `Bearer ${token}`)
+                        .send(JSON.stringify(body))
+                        .then(res => {
+                            expect(res.body.data.updateUserPassword).to.be.true;
+                        }).catch(handleError);
+                });
+
+            });
+
+            describe('deleteUser', () => {
+
+            });
 
         });
 
