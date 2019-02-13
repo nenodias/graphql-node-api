@@ -32,7 +32,7 @@ describe('User', () => {
                     }
                 ]).then((users: UserInstance[]) => {
                     userId = users[0].get('id');
-                    const payload = { sub:userId};
+                    const payload = { sub: userId };
                     token = jwt.sign(payload, JWT_SECRET);
                 });
             });
@@ -194,7 +194,7 @@ describe('User', () => {
             describe('createUser', () => {
                 it('should create new User', () => {
                     let body = {
-                        query:`
+                        query: `
                             mutation createNewUser($input: UserCreateInput!){
                                 createUser(input: $input){
                                     id
@@ -203,11 +203,11 @@ describe('User', () => {
                                 }
                             }
                         `,
-                        variables:{
-                            input:{
-                                name:'Drax',
-                                email:'drax@guardians.com',
-                                password:'1234'
+                        variables: {
+                            input: {
+                                name: 'Drax',
+                                email: 'drax@guardians.com',
+                                password: '1234'
                             }
                         }
                     };
@@ -231,7 +231,7 @@ describe('User', () => {
             describe('updateUser', () => {
                 it('should update an existing User', () => {
                     let body = {
-                        query:`
+                        query: `
                             mutation updateExistingUser($input: UserUpdateInput!){
                                 updateUser(input: $input){
                                     name
@@ -240,11 +240,11 @@ describe('User', () => {
                                 }
                             }
                         `,
-                        variables:{
-                            input:{
-                                name:'Star Lord',
-                                email:'peter@guardians.com',
-                                photo:'avatar.png'
+                        variables: {
+                            input: {
+                                name: 'Star Lord',
+                                email: 'peter@guardians.com',
+                                photo: 'avatar.png'
                             }
                         }
                     };
@@ -265,7 +265,45 @@ describe('User', () => {
                             expect(updateUser.id).to.be.undefined;
                         }).catch(handleError);
                 });
+
+                it('should block operation if token is invalid', () => {
+                    let body = {
+                        query: `
+                            mutation updateExistingUser($input: UserUpdateInput!){
+                                updateUser(input: $input){
+                                    name
+                                    email
+                                    photo
+                                }
+                            }
+                        `,
+                        variables: {
+                            input: {
+                                name: 'Star Lord',
+                                email: 'peter@guardians.com',
+                                photo: 'avatar.png'
+                            }
+                        }
+                    };
+
+                    return chai.request(app)
+                        .post('/graphql')
+                        .set('content-type', 'application/json')
+                        .set('authorization', `INVALID_TOKEN`)
+                        .send(JSON.stringify(body))
+                        .then(res => {
+
+                            expect(res.body.data.updateUser).to.be.null;
+                            expect(res.body).to.have.keys(['data', 'errors']);
+                            expect(res.body.errors).to.be.an('array');
+                            expect(res.body.errors[0].message).to.equal('JsonWebTokenError: jwt malformed');
+                        }).catch(handleError);
+                });
+
             });
+
+
+
         });
 
     });
