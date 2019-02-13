@@ -331,7 +331,24 @@ describe('User', () => {
             });
 
             describe('deleteUser', () => {
+                it('should delete an existing User', () => {
+                    let body = {
+                        query: `
+                            mutation {
+                                deleteUser
+                            }
+                        `
+                    };
 
+                    return chai.request(app)
+                        .post('/graphql')
+                        .set('content-type', 'application/json')
+                        .set('authorization', `Bearer ${token}`)
+                        .send(JSON.stringify(body))
+                        .then(res => {
+                            expect(res.body.data.deleteUser).to.be.true;
+                        }).catch(handleError);
+                });
             });
 
         });
