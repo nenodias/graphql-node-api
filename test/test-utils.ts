@@ -1,5 +1,6 @@
 import * as chai from 'chai';
 const chaiHttp = require('chai-http');
+import * as jwt from 'jsonwebtoken';
 
 import app from './../src/app';
 import db from './../src/models';
@@ -17,5 +18,6 @@ export {
     db,
     chai,
     expect,
-    handleError
+    handleError,
+    jwt
 }

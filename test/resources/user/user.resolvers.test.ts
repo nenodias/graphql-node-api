@@ -1,5 +1,4 @@
-import * as jwt from 'jsonwebtoken';
-import { db, chai, app, handleError, expect } from './../../test-utils';
+import { db, chai, app, handleError, expect, jwt } from './../../test-utils';
 import { UserInstance } from '../../../src/models/UserModel';
 import { JWT_SECRET } from '../../../src/utils/utils';
 
@@ -35,7 +34,7 @@ describe('User', () => {
                     const payload = { sub: userId };
                     token = jwt.sign(payload, JWT_SECRET);
                 });
-            });
+            }).catch(handleError);
     });
 
     describe('Queries', () => {
