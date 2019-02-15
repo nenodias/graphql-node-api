@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "NODE_ENV=development JWT_SECRET=iron_man node_modules/.bin/nodemon --delay 6 dist/index.js",
+    "dev": "cross-env NODE_ENV=development JWT_SECRET=iron_man node_modules/.bin/nodemon --delay 6 dist/index.js",
     "gulp": "node_modules/.bin/gulp",
-    "test": "NODE_ENV=test JWT_SECRET=jwt_test mocha"
+    "test": "cross-env NODE_ENV=test JWT_SECRET=jwt_test mocha"
   },
   "keywords": [],
   "author": "",
@@ -25,6 +25,7 @@
     "@types/sequelize": "4.0.76",
     "chai": "4.1.2",
     "chai-http": "3.0.0",
+    "cross-env": "^5.2.0",
     "gulp": "3.9.1",
     "gulp-clean": "0.3.2",
     "gulp-typescript": "3.2.2",
