@@ -153,7 +153,7 @@ describe('Post', () => {
 
                 it('should paginate a list of Posts', () => {
 
-                    let  query = `
+                    let query = `
                         query getPostsList($first: Int, $offset: Int) {
                             posts(first: $first, offset: $offset) {
                                 title
@@ -168,8 +168,8 @@ describe('Post', () => {
                         .send(query)
                         .query({
                             variables: JSON.stringify({
-                                first:2,
-                                offset:1
+                                first: 2,
+                                offset: 1
                             })
                         })
                         .then(res => {
@@ -221,7 +221,7 @@ describe('Post', () => {
                         .then(res => {
                             const createdPost = res.body.data.createPost;
                             expect(createdPost).to.be.an('object');
-                            expect(createdPost).to.have.keys(['id', 'title','content','author']);
+                            expect(createdPost).to.have.keys(['id', 'title', 'content', 'author']);
                             expect(createdPost.title).to.equal('Fourth Post');
                             expect(createdPost.content).to.equal('This is a fourth post');
                             expect(parseInt(createdPost.author.id)).to.equal(userId);
@@ -258,7 +258,7 @@ describe('Post', () => {
                         .then(res => {
                             const updatedPost = res.body.data.updatePost;
                             expect(updatedPost).to.be.an('object');
-                            expect(updatedPost).to.have.keys(['title','content','photo']);
+                            expect(updatedPost).to.have.keys(['title', 'content', 'photo']);
                             expect(updatedPost.title).to.equal('Post changed');
                             expect(updatedPost.content).to.equal('Content changed');
                             expect(updatedPost.photo).to.equal('fourth_photo_2');
