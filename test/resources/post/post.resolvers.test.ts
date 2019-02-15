@@ -188,7 +188,108 @@ describe('Post', () => {
 
     describe('Mutations', () => {
         describe('application/json', () => {
-            //TODO
+            describe('createPost', () => {
+                it('should create a new post', () => {
+                    let body = {
+                        query: `
+                            mutation createNewPost($input: PostInput!) {
+                                createPost(input: $input) {
+                                    id
+                                    title
+                                    content
+                                    author {
+                                        id
+                                        name
+                                        email
+                                    }
+                                }
+                            }
+                        `,
+                        variables: {
+                            input: {
+                                title: 'Fourth Post',
+                                content: 'This is a fourth post',
+                                photo: 'fourth_photo'
+                            }
+                        }
+                    };
+                    return chai.request(app)
+                        .post('/graphql')
+                        .set('content-type', 'application/json')
+                        .set('Authorization', `Bearer ${token}`)
+                        .send(JSON.stringify(body))
+                        .then(res => {
+                            const createdPost = res.body.data.createPost;
+                            expect(createdPost).to.be.an('object');
+                            expect(createdPost).to.have.keys(['id', 'title','content','author']);
+                            expect(createdPost.title).to.equal('Fourth Post');
+                            expect(createdPost.content).to.equal('This is a fourth post');
+                            expect(parseInt(createdPost.author.id)).to.equal(userId);
+                        }).catch(handleError);
+                });
+            });
+
+            describe('updatePost', () => {
+                it('should update an existing post', () => {
+                    let body = {
+                        query: `
+                            mutation updateExistingPost($id: ID!, $input: PostInput!) {
+                                updatePost(id: $id, input: $input) {
+                                    title
+                                    content
+                                    photo
+                                }
+                            }
+                        `,
+                        variables: {
+                            id: postId,
+                            input: {
+                                title: 'Post changed',
+                                content: 'Content changed',
+                                photo: 'fourth_photo_2'
+                            }
+                        }
+                    };
+                    return chai.request(app)
+                        .post('/graphql')
+                        .set('content-type', 'application/json')
+                        .set('Authorization', `Bearer ${token}`)
+                        .send(JSON.stringify(body))
+                        .then(res => {
+                            const updatedPost = res.body.data.updatePost;
+                            expect(updatedPost).to.be.an('object');
+                            expect(updatedPost).to.have.keys(['title','content','photo']);
+                            expect(updatedPost.title).to.equal('Post changed');
+                            expect(updatedPost.content).to.equal('Content changed');
+                            expect(updatedPost.photo).to.equal('fourth_photo_2');
+                        }).catch(handleError);
+                });
+            });
+
+
+            describe('deletePost', () => {
+                it('should delete an existing post', () => {
+                    let body = {
+                        query: `
+                            mutation deleteExistingPost($id: ID!) {
+                                deletePost(id: $id)
+                            }
+                        `,
+                        variables: {
+                            id: postId
+                        }
+                    };
+                    return chai.request(app)
+                        .post('/graphql')
+                        .set('content-type', 'application/json')
+                        .set('Authorization', `Bearer ${token}`)
+                        .send(JSON.stringify(body))
+                        .then(res => {
+                            expect(res.body.data).to.have.key('deletePost');
+                            expect(res.body.data.deletePost).to.be.true;
+                        }).catch(handleError);
+                });
+            });
         });
     });
 });
