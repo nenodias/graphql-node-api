@@ -1,6 +1,7 @@
 import * as express from 'express';
 import * as graphqlHTTP from 'express-graphql';
 import * as cors from 'cors';
+import * as compression from 'compression';
 
 import db from './models';
 
@@ -34,6 +35,9 @@ class App {
             preflightContinue: false,
             optionsSuccessStatus: 204
         }));
+
+        this.express.use(compression());
+
         this.express.use('/graphql', 
 
             extractJwtMiddleware(),
