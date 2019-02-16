@@ -14,7 +14,7 @@ const authCompose = compose(...authResolvers);
 const fnFindById = (db: DbConnection, authUser: AuthUser, callback) => {
     return db.sequelize.transaction((t:Transaction)=>{
         return db.User.findById(authUser.id).then((user:UserInstance) =>{
-            throwError(!user, `User with ${authUser.id} not found!`);
+            throwError(!user, `User with id ${authUser.id} not found!`);
             return callback(t, user);
         });
     }).catch(handleError);
@@ -48,20 +48,17 @@ export const userResolvers = {
             return db.User.findById(id,{
                 attributes: requestedFields.getFields(info, optionsAST)
             }).then((user: UserInstance) => {
-                if (!user) {
-                    throwError(!user, `User with id ${id} not found!`);
-                }
+                throwError(!user, `User with id ${id} not found!`);
                 return user;
             }).catch(handleError);
         },
         currentUser: authCompose((parent, args, context: ResolverContext, info: GraphQLResolveInfo) => {
             const { db, authUser, requestedFields }: ResolverContext = context;
-            return db.User.findById(authUser.id,{
+            const id = !authUser ? null: authUser.id;
+            return db.User.findById(id,{
                 attributes: requestedFields.getFields(info, optionsAST)
             }).then((user: UserInstance) => {
-                if (!user) {
-                    throwError(!user, `User with ${authUser.id} not found!`);
-                }
+                throwError(!user, `User with id ${id} not found!`);
                 return user;
             }).catch(handleError);
         })

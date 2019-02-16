@@ -6,7 +6,7 @@ export const logResolver: ComposableResolver<any, ResolverContext> =
     (resolver: GraphQLFieldResolver<any, ResolverContext>): GraphQLFieldResolver<any, ResolverContext> => {
 
         return (parent, args, context: ResolverContext, info) => {
-            console.log(args);
+            console.log('');
             return resolver(parent, args, context, info);
         };
 

@@ -79,9 +79,7 @@ describe('Comment', () => {
                             }
                         `,
                         variables: {
-                            postId,
-                            first: 2,
-                            offset: 1
+                            postId
                         }
                     };
                     return chai.request(app)

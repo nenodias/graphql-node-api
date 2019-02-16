@@ -184,6 +184,57 @@ describe('User', () => {
                         }).catch(handleError);
                 });
             });
+
+            describe('currentUser', () => {
+                it('should return the user owner of the token', () => {
+                    let body = {
+                        query: `
+                            query {
+                                currentUser {
+                                    name
+                                    email
+                                }
+                            }
+                        `
+                    };
+                    return chai.request(app)
+                        .post('/graphql')
+                        .set('content-type', 'application/json')
+                        .set('authorization', `Bearer ${token}`)
+                        .send(JSON.stringify(body))
+                        .then(res => {
+                            const currentUser = res.body.data.currentUser;
+                            expect(currentUser).to.be.an('object');
+                            expect(currentUser).to.have.keys(['name', 'email']);
+                            expect(currentUser.name).to.equal('Peter Quill');
+                            expect(currentUser.email).to.equal('peter@guardians.com');
+                        }).catch(handleError);
+                });
+
+                it('should return the user owner of the token', () => {
+                    let body = {
+                        query: `
+                            query {
+                                currentUser {
+                                    name
+                                    email
+                                }
+                            }
+                        `
+                    };
+                    const payload = { sub: -1 };
+                    let newToken = jwt.sign(payload, JWT_SECRET);
+                    return chai.request(app)
+                        .post('/graphql')
+                        .set('content-type', 'application/json')
+                        .set('authorization', `Bearer ${newToken}`)
+                        .send(JSON.stringify(body))
+                        .then(res => {
+                            expect(res.body.errors).to.be.an('array');
+                            expect(res.body.data.currentUser).to.be.null;
+                        }).catch(handleError);
+                });
+            });
         });
     });
 
