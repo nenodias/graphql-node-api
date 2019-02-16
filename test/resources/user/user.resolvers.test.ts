@@ -348,6 +348,24 @@ describe('User', () => {
                             expect(res.body.data.deleteUser).to.be.true;
                         }).catch(handleError);
                 });
+
+                it('should block operation if token not provided', () => {
+                    let body = {
+                        query: `
+                            mutation {
+                                deleteUser
+                            }
+                        `
+                    };
+
+                    return chai.request(app)
+                        .post('/graphql')
+                        .set('content-type', 'application/json')
+                        .send(JSON.stringify(body))
+                        .then(res => {
+                            expect(res.body.errors[0].message).to.be.equal('Unauthorized! Token not provided!');
+                        }).catch(handleError);
+                });
             });
 
         });

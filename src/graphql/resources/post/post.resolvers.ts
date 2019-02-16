@@ -6,6 +6,7 @@ import { PostInstance } from "../../../models/PostModel";
 import { handleError, throwError } from "../../../utils/utils";
 import { compose } from "../../composable/composable.resolver";
 import { authResolvers } from "../../composable/auth.resolver";
+import { logResolver } from "../../composable/log.resolver";
 import { AuthUser } from "../../../interfaces/AuthUserInterface";
 import { DataLoaders } from "../../../interfaces/DataLoadersInterface";
 import { ResolverContext } from '../../../interfaces/ResolverContextInterface';
@@ -33,15 +34,15 @@ export const postResolvers = {
     },
 
     Query: {
-        posts: (parent, { first = 10, offset = 0 }, context: ResolverContext, info: GraphQLResolveInfo) => {
+        posts: compose(logResolver)((parent, { first = 10, offset = 0 }, context: ResolverContext, info: GraphQLResolveInfo) => {
             const { db, requestedFields } : ResolverContext = context;
             return db.Post.findAll({
                 limit: first,
                 offset: offset,
                 attributes: requestedFields.getFields(info, optionsAST)
             }).catch(handleError);
-        },
-        post: (parent, { id }, context: ResolverContext, info: GraphQLResolveInfo) => {
+        }),
+        post: compose()((parent, { id }, context: ResolverContext, info: GraphQLResolveInfo) => {
             const { db, requestedFields } : ResolverContext = context;
             id = parseInt(id);
             return db.Post.findById(id,{
@@ -51,7 +52,7 @@ export const postResolvers = {
                     throwError(!post, `Post with id ${id} not found!`);
                     return post;
                 }).catch(handleError);
-        }
+        })
     },
 
     Mutation: {
