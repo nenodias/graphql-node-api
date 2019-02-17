@@ -10,6 +10,7 @@
     "dev": "cross-env NODE_ENV=development JWT_SECRET=iron_man node_modules/.bin/nodemon --delay 6 dist/index.js",
     "gulp": "node_modules/.bin/gulp",
     "test": "cross-env NODE_ENV=test JWT_SECRET=jwt_test mocha",
+    "pipelines":"cross-env NODE_ENV=pipelines JWT_SECRET=jet_pipelines mocha",
     "coverage": "nyc --extension .ts --include 'src/**/*.ts'  --reporter html npm test"
   },
   "keywords": [],
